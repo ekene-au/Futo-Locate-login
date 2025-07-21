@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive Social Engineering Attack Simulator</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>SE Attack Simulator</span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#scenarios" class="nav-link" data-section="scenarios">
+                    <i class="fas fa-theater-masks"></i> Scenarios
+                </a>
+                <a href="#campaigns" class="nav-link" data-section="campaigns">
+                    <i class="fas fa-bullhorn"></i> Campaigns
+                </a>
+                <a href="#analytics" class="nav-link" data-section="analytics">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </a>
+                <a href="#training" class="nav-link" data-section="training">
+                    <i class="fas fa-graduation-cap"></i> Training
+                </a>
+            </div>
+            <div class="nav-user">
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <span id="username"></span>
+                    <span id="userRole" class="user-role"></span>
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+                <button class="btn-login" id="loginBtn" onclick="showLoginModal()">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Login/Register Modal -->
+        <div id="authModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="authTitle">Login to Security Simulator</h2>
+                    <span class="close" onclick="closeAuthModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" onclick="showLogin()">Login</button>
+                        <button class="tab-btn" onclick="showRegister()">Register</button>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <form id="loginForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="loginUsername">Username</label>
+                            <input type="text" id="loginUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Login</button>
+                    </form>
+
+                    <!-- Register Form -->
+                    <form id="registerForm" class="auth-form" style="display: none;">
+                        <div class="form-group">
+                            <label for="regUsername">Username</label>
+                            <input type="text" id="regUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regRole">Role</label>
+                            <select id="regRole">
+                                <option value="trainee">Trainee</option>
+                                <option value="trainer">Trainer</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="section-header">
+                <h1><i class="fas fa-tachometer-alt"></i> Security Training Dashboard</h1>
+                <p>Monitor and manage your social engineering training programs</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="activeSimulations">0</h3>
+                        <p>Active Simulations</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="completedSimulations">0</h3>
+                        <p>Completed</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="averageScore">0%</h3>
+                        <p>Average Score</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Recent Vulnerabilities</h3>
+                    </div>
+                    <div class="card-content">
+                        <div id="recentVulnerabilities" class="vulnerability-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-trophy"></i> Top Performers</h3>
+                    </div>
+                    <div class="card-content">
+                        <div id="topPerformers" class="leaderboard">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scenarios Section -->
+        <section id="scenarios" class="content-section">
+            <div class="section-header">
+                <h1><i class="fas fa-theater-masks"></i> Attack Scenarios</h1>
+                <p>Manage and execute social engineering training scenarios</p>
+                <button class="btn-primary" onclick="showCreateScenarioModal()">
+                    <i class="fas fa-plus"></i> Create Scenario
+                </button>
+            </div>
+
+            <div class="filters">
+                <select id="difficultyFilter" onchange="filterScenarios()">
+                    <option value="">All Difficulties</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="expert">Expert</option>
+                </select>
+                <select id="typeFilter" onchange="filterScenarios()">
+                    <option value="">All Types</option>
+                    <option value="phishing">Phishing</option>
+                    <option value="pretexting">Pretexting</option>
+                    <option value="baiting">Baiting</option>
+                    <option value="spear_phishing">Spear Phishing</option>
+                </select>
+            </div>
+
+            <div id="scenariosList" class="scenarios-grid">
+                <!-- Dynamic content -->
+            </div>
+        </section>
+
+        <!-- Training Section -->
+        <section id="training" class="content-section">
+            <div class="section-header">
+                <h1><i class="fas fa-graduation-cap"></i> Interactive Training</h1>
+                <p>Practice identifying and responding to social engineering attacks</p>
+            </div>
+
+            <div id="trainingContent">
+                <div class="training-welcome">
+                    <h2>Welcome to Security Training</h2>
+                    <p>Select a scenario to begin your training session. Each scenario will test your ability to identify and respond appropriately to social engineering attacks.</p>
+                    
+                    <div class="training-tips">
+                        <h3>🎯 Training Tips</h3>
+                        <ul>
+                            <li>Pay attention to suspicious indicators</li>
+                            <li>Verify requests through official channels</li>
+                            <li>Report suspicious communications</li>
+                            <li>Never provide credentials to unsolicited requests</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Campaigns Section -->
+        <section id="campaigns" class="content-section">
+            <div class="section-header">
+                <h1><i class="fas fa-bullhorn"></i> Phishing Campaigns</h1>
+                <p>Create and manage simulated phishing campaigns for training</p>
+                <button class="btn-primary" onclick="showCreateCampaignModal()">
+                    <i class="fas fa-plus"></i> Create Campaign
+                </button>
+            </div>
+
+            <div id="campaignsList" class="campaigns-grid">
+                <!-- Dynamic content -->
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="content-section">
+            <div class="section-header">
+                <h1><i class="fas fa-chart-line"></i> Training Analytics</h1>
+                <p>Analyze training effectiveness and identify improvement areas</p>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-trend-up"></i> Training Progress</h3>
+                    </div>
+                    <div class="card-content">
+                        <canvas id="progressChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bug"></i> Vulnerability Types</h3>
+                    </div>
+                    <div class="card-content">
+                        <canvas id="vulnerabilityChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-circle"></i> Personal Analytics</h3>
+                </div>
+                <div class="card-content">
+                    <div id="personalAnalytics">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Create Scenario Modal -->
+    <div id="createScenarioModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>Create New Attack Scenario</h2>
+                <span class="close" onclick="closeCreateScenarioModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="createScenarioForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="scenarioName">Scenario Name</label>
+                            <input type="text" id="scenarioName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="scenarioType">Type</label>
+                            <select id="scenarioType" required>
+                                <option value="">Select Type</option>
+                                <option value="phishing">Phishing</option>
+                                <option value="pretexting">Pretexting</option>
+                                <option value="baiting">Baiting</option>
+                                <option value="spear_phishing">Spear Phishing</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="scenarioDifficulty">Difficulty</label>
+                            <select id="scenarioDifficulty" required>
+                                <option value="">Select Difficulty</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                                <option value="expert">Expert</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="scenarioDescription">Description</label>
+                        <textarea id="scenarioDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="scenarioContent">Scenario Content (JSON)</label>
+                        <textarea id="scenarioContent" rows="6" placeholder='{"template": "example", "variables": {}}'></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="successCriteria">Success Criteria</label>
+                        <textarea id="successCriteria" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="learningObjectives">Learning Objectives</label>
+                        <textarea id="learningObjectives" rows="2"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeCreateScenarioModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Create Scenario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simulation Modal -->
+    <div id="simulationModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="simulationTitle">Training Simulation</h2>
+                <span class="close" onclick="closeSimulationModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="simulationContent">
+                    <!-- Dynamic simulation content -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/scenarios.js"></script>
+    <script src="js/training.js"></script>
+    <script src="js/campaigns.js"></script>
+    <script src="js/analytics.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
