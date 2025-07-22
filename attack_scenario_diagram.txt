@@ -1,0 +1,68 @@
+
+╔═══════════════════════════════════════════════════════════════════════════════════╗
+║                                AttackScenario Interface                           ║
+╠═══════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                   ║
+║  ┌─────────────────────────────────────────────────────────────────────────────┐ ║
+║  │ Property Name     │ Type               │ Description                        │ ║
+║  ├─────────────────────────────────────────────────────────────────────────────┤ ║
+║  │ id               │ string             │ Unique identifier for tracking     │ ║
+║  │ type             │ AttackType         │ Classification of attack method    │ ║
+║  │ title            │ string             │ Descriptive scenario title        │ ║
+║  │ description      │ string             │ Brief summary of context          │ ║
+║  │ difficulty       │ DifficultyLevel    │ Learning progression indicator     │ ║
+║  │ scenario         │ string             │ Detailed scenario narrative       │ ║
+║  │ options          │ ScenarioOption[]   │ Array of possible responses       │ ║
+║  │ correctAnswer    │ string             │ Identifier for correct response   │ ║
+║  │ explanation      │ string             │ Educational content explaining    │ ║
+║  │ indicators       │ string[]           │ List of threat indicators         │ ║
+║  │ tags             │ string[]           │ Metadata for categorization       │ ║
+║  └─────────────────────────────────────────────────────────────────────────────┘ ║
+║                                                                                   ║
+║  ┌─────────────────────────────────────────────────────────────────────────────┐ ║
+║  │                            Related Types                                    │ ║
+║  ├─────────────────────────────────────────────────────────────────────────────┤ ║
+║  │ • AttackType        - Enum/Union of attack methodologies                   │ ║
+║  │ • DifficultyLevel   - Enum/Union for learning progression levels           │ ║
+║  │ • ScenarioOption    - Interface for user response options                  │ ║
+║  └─────────────────────────────────────────────────────────────────────────────┘ ║
+║                                                                                   ║
+║  ┌─────────────────────────────────────────────────────────────────────────────┐ ║
+║  │                            Usage Example                                    │ ║
+║  ├─────────────────────────────────────────────────────────────────────────────┤ ║
+║  │ const scenario: AttackScenario = {                                         │ ║
+║  │   id: "phishing-001",                                                      │ ║
+║  │   type: AttackType.PHISHING,                                               │ ║
+║  │   title: "Suspicious Email Analysis",                                      │ ║
+║  │   difficulty: DifficultyLevel.BEGINNER,                                    │ ║
+║  │   scenario: "You received an urgent email...",                             │ ║
+║  │   options: [...],                                                          │ ║
+║  │   correctAnswer: "option-2",                                               │ ║
+║  │   explanation: "This email shows clear signs...",                          │ ║
+║  │   indicators: ["suspicious sender", "urgent language"],                    │ ║
+║  │   tags: ["email", "social-engineering"]                                    │ ║
+║  │ };                                                                         │ ║
+║  └─────────────────────────────────────────────────────────────────────────────┘ ║
+║                                                                                   ║
+╚═══════════════════════════════════════════════════════════════════════════════════╝
+
+    ┌─────────────────────────────────────────────────────────────────────────────┐
+    │                           Interface Structure Flow                          │
+    └─────────────────────────────────────────────────────────────────────────────┘
+    
+         ┌──────────────┐
+         │ AttackType   │ ◄─────┐
+         └──────────────┘       │
+                                │
+    ┌──────────────────┐        │    ┌─────────────────────┐
+    │ DifficultyLevel  │ ◄──────┼────┤  AttackScenario     │
+    └──────────────────┘        │    │                     │
+                                │    │  • Identification   │
+         ┌──────────────┐        │    │  • Classification   │
+         │ScenarioOption│ ◄──────┘    │  • Content          │
+         │    Array     │             │  • Assessment       │
+         └──────────────┘             │  • Metadata         │
+                                      └─────────────────────┘
+    
+    Educational Training System for Cybersecurity Attack Recognition
+    
